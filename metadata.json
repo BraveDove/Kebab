@@ -1,0 +1,6 @@
+{
+  "name": "Gemüse Corner Kebab",
+  "description": "Ze stánku v Podolí na 4 pobočky po celé Praze. Žádné kompromisy, jen tisícovkami hostů prověřený kebab v nejvyšší kvalitě.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
