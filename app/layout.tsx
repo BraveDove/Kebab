@@ -25,9 +25,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="cs" className={`${anton.variable} ${inter.variable} scroll-smooth`}>
-      <body className="font-sans bg-[#F7F6F6] text-[#000000] antialiased selection:bg-[#FF0000] selection:text-white overflow-x-hidden">
+      <body className="font-sans bg-[#F7F6F6] text-[#000000] antialiased selection:bg-[#FF0000] selection:text-white">
         <LanguageProvider>
-          {children}
+          <div className="overflow-x-hidden flex flex-col min-h-screen">
+            {children}
+          </div>
         </LanguageProvider>
       </body>
     </html>
