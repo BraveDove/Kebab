@@ -14,7 +14,9 @@ export default function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      // Trigger header animation on the second scroll tick (~150px)
+      const threshold = 150;
+      setIsScrolled(window.scrollY > threshold);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -28,99 +30,92 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-[100] transition-all duration-300 bg-[#0e0d0b]/40 backdrop-blur-lg border-b border-white/10 ${
-        isScrolled ? 'py-2' : 'py-4'
+      className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ease-out ${
+        isScrolled
+          ? 'bg-[#0e0d0b]/40 backdrop-blur-lg border-b border-white/10 py-2 shadow-lg'
+          : 'bg-transparent border-b border-transparent py-6'
       }`}
     >
-      <div className="container mx-auto px-4 md:px-8 max-w-7xl flex items-center justify-between">
-        {/* Logo with slight hover scale */}
-        <a href="#" className="flex-shrink-0 z-[100] transition-transform hover:scale-105">
-          <Image
-            src={logoUrl}
-            alt="Gemüse Corner Kebab"
-            width={120}
-            height={48}
-            className={`h-auto transition-all duration-300 drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] ${
-              isScrolled ? 'w-20 md:w-28' : 'w-24 md:w-32'
-            }`}
-            priority
-            referrerPolicy="no-referrer"
-          />
-        </a>
+      <div className="container mx-auto px-4 md:px-8 max-w-7xl flex items-center w-full">
+        
+        {/* Animated Logo Container */}
+        <div
+          className={`flex-shrink-0 flex items-center overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            isScrolled ? 'w-20 md:w-28 opacity-100 translate-y-0' : 'w-0 opacity-0 -translate-y-8 pointer-events-none'
+          }`}
+        >
+          <a href="#" className="block w-[80px] md:w-[112px] transition-transform hover:scale-105">
+            <Image
+              src={logoUrl}
+              alt="Gemüse Corner Kebab"
+              width={120}
+              height={48}
+              className="w-full h-auto drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]"
+              priority
+              referrerPolicy="no-referrer"
+            />
+          </a>
+        </div>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
+        {/* Spacer 1: Grows on scroll to push Nav to right */}
+        <div
+          className={`transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            isScrolled ? 'flex-grow' : 'w-0'
+          }`}
+        />
+
+        {/* Desktop Nav & Lang Switcher Group */}
+        <div className="hidden md:flex flex-shrink-0 items-center gap-6">
           <nav className="flex items-center gap-7">
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                className="group relative text-[#F5F2EB]/90 hover:text-amber-300 font-semibold uppercase tracking-wider text-xs md:text-[13px] transition-colors py-1"
+                className="group relative text-[#F5F2EB]/90 hover:text-white font-semibold uppercase tracking-wider text-xs md:text-[13px] transition-colors py-1"
               >
                 <span>{link.label}</span>
-                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-amber-400 to-amber-500 transition-all duration-300 ease-out group-hover:w-full rounded-full" />
+                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-white transition-all duration-300 ease-out group-hover:w-full rounded-full" />
               </a>
             ))}
           </nav>
-
-          {/* Language Switcher Pill */}
-          <div className="flex items-center bg-black/40 backdrop-blur-sm border border-white/10 rounded-full p-1 shadow-inner">
-            <button
-              onClick={() => setLanguage('cz')}
-              className={`px-3 py-1 rounded-full text-xs font-bold uppercase transition-all duration-200 cursor-pointer ${
-                language === 'cz'
-                  ? 'bg-amber-400 text-black shadow-[0_2px_8px_rgba(251,191,36,0.4)]'
-                  : 'text-[#F5F2EB]/70 hover:text-white'
-              }`}
-            >
-              CZ
-            </button>
-            <button
-              onClick={() => setLanguage('en')}
-              className={`px-3 py-1 rounded-full text-xs font-bold uppercase transition-all duration-200 cursor-pointer ${
-                language === 'en'
-                  ? 'bg-amber-400 text-black shadow-[0_2px_8px_rgba(251,191,36,0.4)]'
-                  : 'text-[#F5F2EB]/70 hover:text-white'
-              }`}
-            >
-              EN
-            </button>
-          </div>
+          
+          {/* Single Pill Lang Switcher (Desktop) */}
+          <button
+            onClick={() => setLanguage(language === 'cz' ? 'en' : 'cz')}
+            className="px-4 py-1.5 rounded-full border border-white/20 text-[#F5F2EB]/90 hover:text-white hover:bg-white/10 transition-colors text-xs font-bold uppercase tracking-widest cursor-pointer shadow-sm"
+            aria-label={`Switch language. Current is ${language}`}
+          >
+            {language === 'cz' ? 'CZ' : 'EN'}
+          </button>
         </div>
 
+        {/* Spacer 2: Shrinks on scroll. Grows at top to push Controls right */}
+        <div
+          className={`transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            isScrolled ? 'w-4 md:w-8' : 'flex-grow'
+          }`}
+        />
+
         {/* Mobile Controls */}
-        <div className="md:hidden flex items-center gap-3 z-[100]">
-          {/* Quick Language Toggle Pill on Mobile */}
-          <div className="flex items-center bg-black/50 backdrop-blur-sm border border-white/10 rounded-full p-0.5">
+        <div className="flex items-center gap-3 flex-shrink-0 z-[100]">
+          
+          <div className="md:hidden flex items-center gap-3">
+            {/* Single Pill Lang Switcher (Mobile) */}
             <button
-              onClick={() => setLanguage('cz')}
-              className={`px-2 py-0.5 rounded-full text-[11px] font-bold uppercase transition-all cursor-pointer ${
-                language === 'cz'
-                  ? 'bg-amber-400 text-black'
-                  : 'text-[#F5F2EB]/70'
-              }`}
+              onClick={() => setLanguage(language === 'cz' ? 'en' : 'cz')}
+              className="px-3 py-1.5 rounded-full border border-white/20 text-[#F5F2EB]/90 hover:text-white hover:bg-white/10 transition-colors text-[11px] font-bold uppercase tracking-widest cursor-pointer"
             >
-              CZ
+              {language === 'cz' ? 'CZ' : 'EN'}
             </button>
+
             <button
-              onClick={() => setLanguage('en')}
-              className={`px-2 py-0.5 rounded-full text-[11px] font-bold uppercase transition-all cursor-pointer ${
-                language === 'en'
-                  ? 'bg-amber-400 text-black'
-                  : 'text-[#F5F2EB]/70'
-              }`}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="p-2 rounded-full border border-white/20 text-[#F5F2EB]/90 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+              aria-label="Toggle Menu"
             >
-              EN
+              {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
-
-          <button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-2 rounded-xl bg-white/5 border border-white/10 text-[#F5F2EB] hover:text-amber-400 hover:border-amber-400/40 transition-colors cursor-pointer"
-            aria-label="Toggle Menu"
-          >
-            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
         </div>
       </div>
 

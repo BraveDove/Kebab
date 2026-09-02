@@ -6,47 +6,45 @@ import { logoUrl } from '@/lib/content';
 
 export default function Hero() {
   return (
-    <section className="relative min-h-[100svh] w-full flex items-center justify-center bg-[#0A0A0A] overflow-hidden pt-24 pb-16">
-      {/* Background ambient glows */}
-      <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-[#FF0000]/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none" />
+    <section className="relative min-h-[100svh] w-full flex flex-col items-center justify-center bg-[#0A0A0A] overflow-hidden">
+      
+      {/* Background Image Layer (Mobile: Bottom half, Desktop: Absolute Right) */}
+      <div className="absolute bottom-0 right-0 w-full h-[60vh] md:h-full md:top-0 md:w-[90%] lg:w-[70%] z-0">
+        <Image
+          src={heroBg}
+          alt="Gemüse Corner Kebab"
+          fill
+          className="object-cover object-top md:object-[center_30%]"
+          priority
+          quality={100}
+          referrerPolicy="no-referrer"
+        />
+        {/* Gradients for seamless cinematic dissolve */}
+        {/* 1. Heavy dissolve from left to right (Desktop only) */}
+        <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-[#0A0A0A] via-[#0A0A0A]/90 lg:via-[#0A0A0A]/70 to-transparent" />
+        
+        {/* 2. Soft fade from top to bottom (Mobile only - blends image into the top black section) */}
+        <div className="md:hidden absolute inset-x-0 top-0 h-[30vh] bg-gradient-to-b from-[#0A0A0A] via-[#0A0A0A]/80 to-transparent" />
 
-      <div className="container mx-auto px-4 md:px-8 max-w-7xl relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 lg:gap-20 items-center">
-          
-          {/* Left Side - Massive Logo */}
-          <div className="flex justify-center lg:justify-start">
-            <div className="w-full max-w-[450px] md:max-w-[550px] lg:max-w-full">
-              <Image
-                src={logoUrl}
-                alt="Gemüse Corner Kebab"
-                width={800}
-                height={400}
-                className="w-full h-auto drop-shadow-[0_0_40px_rgba(255,0,0,0.15)]"
-                priority
-                referrerPolicy="no-referrer"
-              />
-            </div>
-          </div>
+        {/* 3. Soft fade from bottom (for smooth scroll transition into content) */}
+        <div className="absolute inset-x-0 bottom-0 h-[20vh] md:h-[30vh] bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/80 to-transparent" />
+      </div>
 
-          {/* Right Side - Packaged Food Photo */}
-          <div className="flex justify-center lg:justify-end">
-            <div className="relative w-full max-w-[450px] md:max-w-[500px] aspect-square rounded-[2.5rem] overflow-hidden shadow-[0_20px_60px_-15px_rgba(0,0,0,0.6)] border border-white/10 group">
-              <Image
-                src={heroBg}
-                alt="Gemüse Corner Kebab"
-                fill
-                className="object-cover transition-transform duration-1000 group-hover:scale-105"
-                priority
-                quality={100}
-                referrerPolicy="no-referrer"
-              />
-              {/* Inner glass reflection/border for premium feel */}
-              <div className="absolute inset-0 rounded-[2.5rem] border border-white/10 pointer-events-none mix-blend-overlay" />
-              <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-transparent pointer-events-none" />
-            </div>
-          </div>
+      {/* Ambient glow behind logo */}
+      <div className="absolute top-[25%] md:top-1/2 left-1/2 md:left-[15%] -translate-x-1/2 md:translate-x-0 -translate-y-1/2 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-[#FF0000]/15 rounded-full blur-[100px] pointer-events-none z-0" />
 
+      {/* Content Container (Massive Logo Only) */}
+      <div className="container mx-auto px-4 md:px-8 max-w-7xl relative z-10 w-full flex-grow flex flex-col justify-start md:justify-center pt-[20vh] md:pt-0">
+        <div className="flex flex-col items-center md:items-start justify-center w-full max-w-[500px] sm:max-w-[550px] md:max-w-[650px] lg:max-w-[850px] mx-auto md:mx-0">
+          <Image
+            src={logoUrl}
+            alt="Gemüse Corner Kebab"
+            width={900}
+            height={450}
+            className="w-[90%] md:w-full h-auto drop-shadow-[0_10px_40px_rgba(255,0,0,0.15)]"
+            priority
+            referrerPolicy="no-referrer"
+          />
         </div>
       </div>
 
